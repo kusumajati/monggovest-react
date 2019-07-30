@@ -4,21 +4,34 @@ import Axios from 'axios'
 import {
     Container,
     Row,
-    Col
+    Col,
+    Breadcrumb, BreadcrumbItem
 } from 'reactstrap';
+import NumberFormat from 'react-number-format'
 
 class MainInvestasi extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            semuaInvestasi: []
+            semuaInvestasi: [],
+            semuaVerified: [],
+            // baseUrl: 'http://localhost:5000',
+            baseUrl: 'https://nino-monggovest.herokuapp.com'
         }
     }
     componentDidMount() {
-        Axios.get('https://nino-monggovest.herokuapp.com/allinvestment')
+        let semuaVerified = []
+        Axios.get(this.state.baseUrl + '/allinvestment')
             .then(dataSemuaInvestasi => {
+                // console.log(dataSemuaInvestasi.data.data)
+                dataSemuaInvestasi.data.data.map(investasi => {
+                    if (investasi.isVerified) {
+                        semuaVerified.push(investasi)
+                    }
+                })
+
                 this.setState({
-                    semuaInvestasi: dataSemuaInvestasi.data.data
+                    semuaVerified: semuaVerified
                 })
 
             }).catch(err => {
@@ -26,28 +39,27 @@ class MainInvestasi extends React.Component {
             })
     }
     render() {
-        const cards = this.state.semuaInvestasi.map(investasi => {
+        const cards = this.state.semuaVerified.map(investasi => {
 
             return (
-
-                <Col key={investasi._id} sm="4">
+                
+                <Col style={{margin:'1em 0'}} key={investasi._id} sm="2">
                     <CardInvestasi
-                        title={investasi.nama}
-                        gambar={investasi.gambar[0]}
-                        deskripsi={investasi.rincian}
-                        link={`/investasi/${investasi._id}`}
-                        buttonText={'Lihat Detail'}
+                        title={investasi.nama} gambar={investasi.gambar[0]} harga={<NumberFormat value={investasi.nilaiInvestasi} displayType={'text'} thousandSeparator={true} prefix={'Rp'} />} link={`/investasi/${investasi._id}`} returnHigh={investasi.returnHigh} returnLow={investasi.returnLow} periodeBagiHasil={investasi.periodeBagiHasil}
                     />
                 </Col>
             )
         })
         return (
             <div>
-                <Container>
-                <h2 style={{textAlign:'center', margin:'50px'}}>Investasi</h2>
-                <Row>
-                    {cards}
-                </Row>
+                <Container style={{height:'100%'}}>
+                <Breadcrumb tag="nav" listTag="div" style={{ margin: '2em 0 1em 0' }}>
+                            <BreadcrumbItem tag="a" href="/">Beranda</BreadcrumbItem>
+                            <BreadcrumbItem tag="a" href="/investasi">Investasi</BreadcrumbItem>
+                        </Breadcrumb>
+                    <Row>
+                        {cards}
+                    </Row>
                 </Container>
             </div>
         )

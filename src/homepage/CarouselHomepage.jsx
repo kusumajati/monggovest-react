@@ -103,7 +103,7 @@ class CarouselHomepage extends Component {
             onExited={this.onExited}
             key={error.src}
           >
-            <img style={{ height: "600px", width: '1500px' }} src={error.src} alt={error.altText} />
+            <img style={{ width: '100%' }} src={error.src} alt={error.altText} />
             <CarouselCaption captionText={error.caption} captionHeader={error.caption} />
           </CarouselItem>
         );

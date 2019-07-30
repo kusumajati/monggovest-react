@@ -1,5 +1,5 @@
 import React from 'react'
-import { Card, Button, CardTitle, CardText, Row, Col, Container } from 'reactstrap'
+import { Card, Button, CardTitle, CardText, Row, Col, Container, CardBody, CardFooter } from 'reactstrap'
 import { Link } from "react-router-dom";
 
 
@@ -8,16 +8,28 @@ class CardInvestasi extends React.Component {
 
     render() {
         return (
-
-            <Card body style={{ textAlign: "center" }}>
-                <CardTitle><h5>{this.props.title}</h5></CardTitle>
-                <img style={{ width: 'auto', height: '200px' }}
+            <Link style={{color: 'black', textDecoration:'none'}} to={this.props.link}>
+            <Card style={{ textAlign: "center" }}>
+                <CardTitle>
+                <img style={{ width: '100%' }}
                     src={this.props.gambar} alt="" />
-                <CardText>
-                    {this.props.deskripsi}
-                </CardText>
-                <Button style={{display:'block'}}><Link className='text-white' to={this.props.link}>{this.props.buttonText}</Link></Button>
+                </CardTitle>
+                <CardBody style={{padding:'0.2em'}}>
+                <CardText style={{  fontSize:'1.1em', marginBottom:'0'}}><strong>{this.props.title}</strong></CardText>
+                <CardText style={{ fontSize: '0.85em' }}>  {this.props.harga}</CardText>
+                </CardBody>
+                <CardFooter style={{padding:'0.3em'}}>
+                    <div style={{display:'inline-flex', float: 'left'}}>
+                        <img style={{marginRight:'0.3em'}} src='data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHN2ZyB3aWR0aD0iMThweCIgaGVpZ2h0PSIxOHB4IiB2aWV3Qm94PSIwIDAgMTggMTgiIHZlcnNpb249IjEuMSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayI+CiAgICA8IS0tIEdlbmVyYXRvcjogU2tldGNoIDQ5LjMgKDUxMTY3KSAtIGh0dHA6Ly93d3cuYm9oZW1pYW5jb2RpbmcuY29tL3NrZXRjaCAtLT4KICAgIDx0aXRsZT5pY29uLXJvaTwvdGl0bGU+CiAgICA8ZGVzYz5DcmVhdGVkIHdpdGggU2tldGNoLjwvZGVzYz4KICAgIDxkZWZzPjwvZGVmcz4KICAgIDxnIGlkPSJQYWdlLTUiIHN0cm9rZT0ibm9uZSIgc3Ryb2tlLXdpZHRoPSIxIiBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPgogICAgICAgIDxnIGlkPSJMYW5kaW5nLVBhZ2UtKExvZ2dlZC1PdXQpIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgtMTgyLjAwMDAwMCwgLTIxMjEuMDAwMDAwKSIgZmlsbD0iIzBBMzU2NSI+CiAgICAgICAgICAgIDxnIGlkPSJTZWN0aW9uIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgwLjAwMDAwMCwgMTQ4MC4wMDAwMDApIj4KICAgICAgICAgICAgICAgIDxnIGlkPSJDYXJkcyIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMTYwLjAwMDAwMCwgMjAwLjAwMDAwMCkiPgogICAgICAgICAgICAgICAgICAgIDxnIGlkPSJDYXJkIj4KICAgICAgICAgICAgICAgICAgICAgICAgPGcgaWQ9IkluZm8iIHRyYW5zZm9ybT0idHJhbnNsYXRlKDEuMDAwMDAwLCA0MTguMDAwMDAwKSI+CiAgICAgICAgICAgICAgICAgICAgICAgICAgICA8ZyBpZD0iaWNvbi9yb2kiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDIwLjAwMDAwMCwgMjIuMDAwMDAwKSI+CiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgPHBhdGggZD0iTTE3LjI0MTE4NzUsMS44NzQ5Mzc1IEwxOC4xMjUxNDU4LDIuNzU4ODk1ODMgTDEzLjg3OTMxMjUsNy4wMDQzMTI1IEwxMC4yMzUzNTQyLDUuNjA1NTYyNSBMNi4yNTUzNTQxNyw5Ljg3Mzg5NTgzIEwxLjg3NDkzNzUsNy45MjQ5Mzc1IEwyLjM4MzY4NzUsNi43ODIyMjkxNyBMNS45NDg4OTU4Myw4LjM2OTUyMDgzIEw5Ljg5NjE4NzUsNC4xMzY4MTI1IEwxMy41Njk1MjA4LDUuNTQ2NjA0MTcgTDE3LjI0MTE4NzUsMS44NzQ5Mzc1IFogTTEuODc1LDE4LjEyNSBMMS44NzUsMTMuMTI1IEwzLjEyNSwxMy4xMjUgTDMuMTI1LDE4LjEyNSBMMS44NzUsMTguMTI1IFogTTQuMzc1LDE4LjEyNSBMNC4zNzUsMTMuMTI1IEw1LjYyNSwxMy4xMjUgTDUuNjI1LDE4LjEyNSBMNC4zNzUsMTguMTI1IFogTTYuODc1LDE4LjEyNSBMNi44NzUsMTEuODc1IEw4LjEyNDc5MTY3LDExLjg3NSBMOC4xMjQ3OTE2NywxOC4xMjUgTDYuODc1LDE4LjEyNSBaIE05LjM3NSwxOC4xMjUgTDkuMzc1LDEwLjYyNSBMMTAuNjI1LDEwLjYyNSBMMTAuNjI1LDE4LjEyNSBMOS4zNzUsMTguMTI1IFogTTExLjg3NSwxOC4xMjUgTDExLjg3NSwxMS44NzUgTDEzLjEyNSwxMS44NzUgTDEzLjEyNSwxOC4xMjUgTDExLjg3NSwxOC4xMjUgWiBNMTQuMzc1LDE4LjEyNSBMMTQuMzc1LDEzLjEyNSBMMTUuNjI0NzkxNywxMy4xMjUgTDE1LjYyNDc5MTcsMTguMTI1IEwxNC4zNzUsMTguMTI1IFogTTE2Ljg3NSwxOC4xMjUgTDE2Ljg3NSwxMC42MjUgTDE4LjEyNSwxMC42MjUgTDE4LjEyNSwxOC4xMjUgTDE2Ljg3NSwxOC4xMjUgWiIgaWQ9ImNoYXJ0Ij48L3BhdGg+CiAgICAgICAgICAgICAgICAgICAgICAgICAgICA8L2c+CiAgICAgICAgICAgICAgICAgICAgICAgIDwvZz4KICAgICAgICAgICAgICAgICAgICA8L2c+CiAgICAgICAgICAgICAgICA8L2c+CiAgICAgICAgICAgIDwvZz4KICAgICAgICA8L2c+CiAgICA8L2c+Cjwvc3ZnPg==' alt=""/>
+                        <span style={{fontSize:'0.7em'}}>{this.props.returnLow}-{this.props.returnHigh}%</span>
+                    </div>
+                    <div style={{display:'inline-flex', float:'right'}} >
+                    <span style={{fontSize:'0.7em'}}>{this.props.periodeBagiHasil} Tahun</span>  
+                        <img style={{marginLeft:'0.3em'}} src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHN2ZyB3aWR0aD0iMThweCIgaGVpZ2h0PSIxOHB4IiB2aWV3Qm94PSIwIDAgMTggMTgiIHZlcnNpb249IjEuMSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayI+CiAgICA8IS0tIEdlbmVyYXRvcjogU2tldGNoIDQ5LjMgKDUxMTY3KSAtIGh0dHA6Ly93d3cuYm9oZW1pYW5jb2RpbmcuY29tL3NrZXRjaCAtLT4KICAgIDx0aXRsZT5pY29uLXBlcmlvZDwvdGl0bGU+CiAgICA8ZGVzYz5DcmVhdGVkIHdpdGggU2tldGNoLjwvZGVzYz4KICAgIDxkZWZzPjwvZGVmcz4KICAgIDxnIGlkPSJQYWdlLTUiIHN0cm9rZT0ibm9uZSIgc3Ryb2tlLXdpZHRoPSIxIiBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPgogICAgICAgIDxnIGlkPSJMYW5kaW5nLVBhZ2UtKExvZ2dlZC1PdXQpIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgtNDgwLjAwMDAwMCwgLTIxMjEuMDAwMDAwKSIgZmlsbD0iIzBBMzU2NSI+CiAgICAgICAgICAgIDxnIGlkPSJTZWN0aW9uIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgwLjAwMDAwMCwgMTQ4MC4wMDAwMDApIj4KICAgICAgICAgICAgICAgIDxnIGlkPSJDYXJkcyIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMTYwLjAwMDAwMCwgMjAwLjAwMDAwMCkiPgogICAgICAgICAgICAgICAgICAgIDxnIGlkPSJDYXJkIj4KICAgICAgICAgICAgICAgICAgICAgICAgPGcgaWQ9IkluZm8iIHRyYW5zZm9ybT0idHJhbnNsYXRlKDEuMDAwMDAwLCA0MTguMDAwMDAwKSI+CiAgICAgICAgICAgICAgICAgICAgICAgICAgICA8ZyBpZD0iaWNvbi9wZXJpb2QiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDMxOC4wMDAwMDAsIDIyLjAwMDAwMCkiPgogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDxwYXRoIGQ9Ik0xMC42MjUsMS45MDE0NTgzMyBDMTQuODEzOTU4MywyLjIyMTg3NSAxOC4xMjUsNS43MzAyMDgzMyAxOC4xMjUsMTAgQzE4LjEyNSwxMS40Mjg5NTgzIDE3Ljc0ODU0MTcsMTIuODM0Mzc1IDE3LjAzNjQ1ODMsMTQuMDYzMzMzMyBDMTUuNTg4MzMzMywxNi41NjgzMzMzIDEyLjg5MjA4MzMsMTguMTI1IDEwLDE4LjEyNSBDNS41MTk3OTE2NywxOC4xMjUgMS44NzUsMTQuNDgwMjA4MyAxLjg3NSwxMCBDMS44NzUsOC41NzA4MzMzMyAyLjI1MTQ1ODMzLDcuMTY1ODMzMzMgMi45NjM1NDE2Nyw1LjkzNjY2NjY3IEw0LjA0NSw2LjU2MzMzMzMzIEMzLjQ0MzEyNSw3LjYwMjI5MTY3IDMuMTI1LDguNzkwNjI1IDMuMTI1LDEwIEMzLjEyNSwxMy43OTA4MzMzIDYuMjA5MTY2NjcsMTYuODc1IDEwLDE2Ljg3NSBDMTIuNDQ3MjkxNywxNi44NzUgMTQuNzI4OTU4MywxNS41NTc3MDgzIDE1Ljk1NDU4MzMsMTMuNDM3MjkxNyBDMTYuNTU2ODc1LDEyLjM5NzcwODMgMTYuODc1LDExLjIwOTM3NSAxNi44NzUsMTAgQzE2Ljg3NSw2LjQxOTc5MTY3IDE0LjEyMzk1ODMsMy40NzE2NjY2NyAxMC42MjUsMy4xNTQ3OTE2NyBMMTAuNjI1LDUuNjI1IEw5LjM3NSw1LjYyNSBMOS4zNzUsMS44NzUgTDEwLjYyNSwxLjg3NSBMMTAuNjI1LDEuOTAxNDU4MzMgWiBNOS40NTA4OTU4MywxMC4zMzQ2NjY3IEw1LjkxNTI3MDgzLDYuNzk5MDQxNjcgQzUuNjcxMTA0MTcsNi41NTUwODMzMyA1LjY3MTEwNDE3LDYuMTU5MjUgNS45MTUyNzA4Myw1LjkxNTI5MTY3IEM2LjE1OTQzNzUsNS42NzExMjUgNi41NTUwNjI1LDUuNjcxMTI1IDYuNzk5MDIwODMsNS45MTUyOTE2NyBMMTAuMzM0NjQ1OCw5LjQ1MDkxNjY3IEMxMC41Nzg4MTI1LDkuNjk0ODc1IDEwLjU3ODgxMjUsMTAuMDkwNzA4MyAxMC4zMzQ2NDU4LDEwLjMzNDY2NjcgQzEwLjIxMjU2MjUsMTAuNDU2NzUgMTAuMDUyNzcwOCwxMC41MTc3OTE3IDkuODkyNzcwODMsMTAuNTE3NzkxNyBDOS43MzI5NzkxNywxMC41MTc3OTE3IDkuNTcyOTc5MTcsMTAuNDU2NzUgOS40NTA4OTU4MywxMC4zMzQ2NjY3IFoiIGlkPSJ0aW1lciI+PC9wYXRoPgogICAgICAgICAgICAgICAgICAgICAgICAgICAgPC9nPgogICAgICAgICAgICAgICAgICAgICAgICA8L2c+CiAgICAgICAgICAgICAgICAgICAgPC9nPgogICAgICAgICAgICAgICAgPC9nPgogICAgICAgICAgICA8L2c+CiAgICAgICAgPC9nPgogICAgPC9nPgo8L3N2Zz4=" alt=""/>
+                    </div>
+                </CardFooter>
             </Card>
+            </Link>
         )
     }
 }

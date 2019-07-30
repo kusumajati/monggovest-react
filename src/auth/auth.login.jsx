@@ -5,9 +5,10 @@ import {  Label, FormGroup, Input, Container, Button, Form, Col } from 'reactstr
 import AppHeader from '../common/AppHeader'
 import { Redirect } from 'react-router-dom'
 import axios from "axios";
+import AppFooter from '../common/AppFooter'
 
 axios.defaults.baseURL = 'https://nino-monggovest.herokuapp.com'
-// axios.defaults.baseURL = 'http://localhost:8080'
+// axios.defaults.baseURL = 'http://localhost:5000'
 class Login extends React.Component {
   constructor(props) {
     super(props)
@@ -37,18 +38,21 @@ class Login extends React.Component {
 
   logInLogic(event) {
     event.preventDefault();
-    axios
-      .post("/v1/api/user/login", {
+    axios.post("/v1/api/user/login", {
         // .post("/api/login", {
         email: this.state.email,
         password: this.state.password
       })
       .then((response) => {
-        console.log(response, "the response");
 
+        console.log(response.data.data.lastLogin, 'login')
+        console.log(response.data.data.created_at, 'created_at')
         localStorage.setItem('JWT_TOKEN', response.data.token)
         localStorage.setItem('USER_ID', response.data.data._id)
         store.set('loggedIn', true);
+        if(response.data.data.isAdmin){
+          store.set('admin', true)
+        }
         this.props.history.push('/');
         alert('Anda berhasil masuk. Selamat Datang di Monggovest');
 
@@ -65,7 +69,7 @@ class Login extends React.Component {
   }
   render() {
 
-    console.log(isLoggedIn())
+
     if (isLoggedIn()) {
       return (
         <Redirect to='/investasi' />
@@ -73,11 +77,11 @@ class Login extends React.Component {
     } else {
 
       return (
-        <div>
+        <div style={{height:'100%'}}>
           <AppHeader />
-          <Container style={{ textAlign: 'center' }}>
+          <Container style={{ textAlign: 'center', height:'100%' }}>
             <h2 style={{ margin: '30px' }}>Login</h2>
-            <Form style={{ width: '400px', margin: 'auto' }}>
+            <Form onSubmit={this.logInLogic} style={{ width: '400px', margin: 'auto' }}>
               <FormGroup row>
                 <Col sm='3' style={{textAlign:'left'}}>
                 <Label  for='email'>Email: </Label>
@@ -93,10 +97,11 @@ class Login extends React.Component {
               </FormGroup>
 
 
-              <Button onClick={this.logInLogic}>Submit</Button>
+              <Button>Submit</Button>
             </Form>
 
           </Container>
+          <AppFooter />
         </div>
       );
     }
