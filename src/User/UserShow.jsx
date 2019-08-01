@@ -18,8 +18,8 @@ class UserShow extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            // baseUrl: 'http://localhost:5000',
-            baseUrl: 'https://nino-monggovest.herokuapp.com',
+            baseUrl: 'http://localhost:5000',
+            // baseUrl: 'https://nino-monggovest.herokuapp.com',
             user: {},
             activeTab: '1',
             createdInvestments: [],

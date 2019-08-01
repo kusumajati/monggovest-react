@@ -21,9 +21,9 @@ class Admin extends React.Component {
           author:'',
           user:{},
           bankTransfers:[],
-          // baseUrl: 'http://localhost:5000',
+          baseUrl: 'http://localhost:5000',
           
-          baseUrl: 'https://nino-monggovest.herokuapp.com'
+          // baseUrl: 'https://nino-monggovest.herokuapp.com'
         };
         this.verifyInvestment = this.verifyInvestment.bind(this)
         this.verifyTransfer = this.verifyTransfer.bind(this)

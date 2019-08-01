@@ -7,8 +7,8 @@ import { Redirect } from 'react-router-dom'
 import axios from "axios";
 import AppFooter from '../common/AppFooter'
 
-axios.defaults.baseURL = 'https://nino-monggovest.herokuapp.com'
-// axios.defaults.baseURL = 'http://localhost:5000'
+// axios.defaults.baseURL = 'https://nino-monggovest.herokuapp.com'
+axios.defaults.baseURL = 'http://localhost:5000'
 class Login extends React.Component {
   constructor(props) {
     super(props)

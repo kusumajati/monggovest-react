@@ -26,8 +26,8 @@ class EditProfile extends React.Component {
             jumlahPenghasilan: '',
             sumberPenghasilan: '',
 
-            // baseUrl: 'http://localhost:5000',
-            baseUrl: 'https://nino-monggovest.herokuapp.com',
+            baseUrl: 'http://localhost:5000',
+            // baseUrl: 'https://nino-monggovest.herokuapp.com',
             redirect: false
 
         }

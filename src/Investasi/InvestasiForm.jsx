@@ -42,8 +42,8 @@ class InvestasiForm extends React.Component {
             gambar4: '',
             gambar5: '',
 
-            // baseUrl: 'http://localhost:5000',
-            baseUrl: 'https://nino-monggovest.herokuapp.com',
+            baseUrl: 'http://localhost:5000',
+            // baseUrl: 'https://nino-monggovest.herokuapp.com',
 
             datasWithImg: [],
             success: false

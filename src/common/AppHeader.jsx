@@ -29,8 +29,8 @@ class AppHeader extends React.Component {
         this.state = {
             isOpen: false,
             user: {},
-            // baseUrl: 'http://localhost:5000',
-            baseUrl: 'https://nino-monggovest.herokuapp.com'
+            baseUrl: 'http://localhost:5000',
+            // baseUrl: 'https://nino-monggovest.herokuapp.com'
         };
         this.logOutLogic = this.logOutLogic.bind(this)
     }

@@ -17,8 +17,8 @@ export default class MainHomepage extends React.Component {
         this.state = {
             investment:[],
             investasiTerbaru: [],
-            // baseUrl: 'http://localhost:5000',
-            baseUrl: 'https://nino-monggovest.herokuapp.com'
+            baseUrl: 'http://localhost:5000',
+            // baseUrl: 'https://nino-monggovest.herokuapp.com'
         }
 
     }
