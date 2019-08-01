@@ -3,7 +3,6 @@ import AppHeader from '../common/AppHeader'
 import AppFooter from '../common/AppFooter'
 import { Container, Row, Col, Breadcrumb, BreadcrumbItem, ListGroup, ListGroupItem, TabContent, TabPane, Nav, NavItem, NavLink, Card, Button, CardTitle, CardText, } from 'reactstrap'
 import isLoggedIn from '../helper/isLoggedIn'
-import isAdmin from '../helper/isAdmin'
 import { Link, Redirect } from 'react-router-dom'
 import Axios from 'axios'
 import classnames from 'classnames';
@@ -23,7 +22,8 @@ class UserShow extends React.Component {
             baseUrl: 'https://nino-monggovest.herokuapp.com',
             user: {},
             activeTab: '1',
-            createdInvestments: []
+            createdInvestments: [],
+            portfolio:[]
         }
 
     }
@@ -32,24 +32,15 @@ class UserShow extends React.Component {
         console.log(this.props.match.params.userId)
         Axios.get(`${this.state.baseUrl}/v1/api/user/${this.props.match.params.userId}`)
             .then(user => {
-                this.setState({
-                    user: user.data.data
-                })
-                Axios.get(`${this.state.baseUrl}/allinvestment`)
-                    .then(investment => {
-                        investment.data.data.map(investasi => {
-                            if (investasi.author._id === this.state.user._id) {
-                                investmentSorted.push(investasi)
-                            }
-                        })
-                        this.setState({
-                            createdInvestments: investmentSorted
-                        })
-                        console.log(this.state.createdInvestments)
-                    }).catch(err => {
-                        console.log(err)
-                        alert(err)
+                Axios.get(`${this.state.baseUrl}/v1/api/portfolioUser/${this.props.match.params.userId}`).then(portfolio=>{
+                    this.setState({
+                        user: user.data.data,
+                        bankTransfers: user.data.data.bankTransfers,
+                        createdInvestments: user.data.data.authoredInvestments,
+                        portfolio: portfolio.data.data
                     })
+                })
+
             }).catch(err => {
                 console.log(err)
                 alert(err)
@@ -66,14 +57,13 @@ class UserShow extends React.Component {
         }
     }
     render() {
-        // if(isLoggedIn()){
-        //     return(
-        //     <Redirect to='/' />
-        //     )
-        // }
         let profileCheck
         let riwayatCheck
+        let riwayatContent
+        let statusBayar
+        let portfolio
         if (isLoggedIn() && this.state.user._id === localStorage.getItem('USER_ID')) {
+            
             profileCheck =
                 <NavItem>
                     <NavLink
@@ -83,22 +73,69 @@ class UserShow extends React.Component {
                         Profile
 </NavLink>
                 </NavItem>
-            riwayatCheck = 
-            <NavItem>
-            <NavLink
-                className={classnames({ active: this.state.activeTab === '4' })}
-                onClick={() => { this.toggle('4'); }}
-            >
-                Riwayat Transaksi
+            riwayatCheck =
+                <NavItem>
+                    <NavLink
+                        className={classnames({ active: this.state.activeTab === '4' })}
+                        onClick={() => { this.toggle('4'); }}
+                    >
+                        Riwayat Transaksi
 </NavLink>
-        </NavItem>
+                </NavItem>
+            riwayatContent = this.state.bankTransfers.map(transfer => {
+                if(transfer.isPaid){
+                    statusBayar = <p style={{margin: '0'}}>Status: <strong style={{color:'green'}}>LUNAS</strong></p>
+
+                }else{
+                    statusBayar = <p style={{margin: '0'}}>Status: <strong style={{color:'red'}}>BELUM DIBAYAR</strong></p>
+                }
+                return(
+                <ListGroupItem style={{fontSize:'0.9em', borderTop:'none', borderLeft:'none', borderRight:'none'}}>
+                    <p style={{margin:'0'}}>Nama Pemilik Akun: {transfer.pemilikAkun} <img style={{width:'100px', display:'flex-box', float:'right'}} src={transfer.investment.gambar[0]} alt=""/></p>
+                    <p style={{margin: '0'}}>Nomor Rekening: {transfer.noRek} - {transfer.namaBank}  </p>
+                    <p style={{margin: '0'}}>Investasi: {transfer.investment.nama}</p>
+                    <p style={{margin: '0'}}>Lot / Jumlah Transfer: {transfer.slot} Lot / <NumberFormat value={transfer.jumlahTransfer} displayType={'text'} thousandSeparator={true} prefix={'Rp'} /></p>
+                    {statusBayar}
+                    
+                </ListGroupItem>
+                )
+            })
+
+
         }
+        portfolio = this.state.portfolio.map(dataPortfolio=>{
+            // console.log(dataPortfolio.investment.gambar)
+            return(
+                <Row style={{marginBottom:'1em', padding:'1em', borderBottom:'solid 0.5px #dee2e6'}}>
+                <Col sm='4'>
+                <img src={dataPortfolio.investment.gambar[0]} style={{width:'100%'}} alt=""/>
+                </Col>
+                <Col sm='3' >
+                        <p style={{margin:'0'}}>Nama Investasi</p>
+                        <p style={{margin:'0'}}>Nilai Investasi</p>
+                        <p style={{margin:'0'}}>Lot Dimiliki</p>
+                        <p style={{margin:'0'}}>Nilai Lot</p>                      
+                        <p style={{margin:'0'}}>Return</p>
+                        <p style={{margin:'0'}}>Periode Kontrak</p>
+                </Col>
+                <Col sm='5' >
+                <p style={{margin:'0'}}>: {dataPortfolio.investment.nama}</p>
+                        <p style={{margin:'0'}}>: <NumberFormat value={dataPortfolio.investment.nilaiInvestasi} displayType={'text'} thousandSeparator={true} prefix={'Rp'} /></p>
+                        <p style={{margin:'0'}}>: {dataPortfolio.slot} / {dataPortfolio.investment.jumlahSlot}</p>
+                        <p style={{margin:'0'}}>: <NumberFormat value={dataPortfolio.slot * dataPortfolio.investment.hargaLot} displayType={'text'} thousandSeparator={true} prefix={'Rp'} /></p>                      
+                        <p style={{margin:'0'}}>: {dataPortfolio.investment.returnLow} - {dataPortfolio.investment.returnHigh} %</p>
+                        <p style={{margin:'0'}}>: {dataPortfolio.investment.periodeKontrak} Tahun</p>
+                </Col>
+                
+            </Row>  
+            )
+        })
         let createdInvestments = this.state.createdInvestments.map(investasi => {
             return (
 
                 <Col style={{ paddingTop: '1.5em' }} sm="3">
                     <CardInvestasi
-                        title={investasi.nama} gambar={investasi.gambar[0]} harga={<NumberFormat value={investasi.nilaiInvestasi} displayType={'text'} thousandSeparator={true} prefix={'Rp'} />} link={`/investasi/${investasi._id}`} returnHigh={investasi.returnHigh} returnLow={investasi.returnLow} periodeBagiHasil={investasi.periodeBagiHasil} />
+                        title={investasi.nama} gambar={investasi.gambar[0]} harga={<NumberFormat value={investasi.nilaiInvestasi} displayType={'text'} thousandSeparator={true} prefix={'Rp'} />} link={`/investasi/${investasi._id}`} returnHigh={investasi.returnHigh} returnLow={investasi.returnLow} periodeKontrak={investasi.periodeKontrak} />
                 </Col>
             )
         })
@@ -118,8 +155,8 @@ class UserShow extends React.Component {
                                 <ListGroupItem>
                                     <img style={{ margin: '0 10%', width: '80%' }} src={this.state.user.profilePicture} alt="" />
                                 </ListGroupItem>
-                                <ListGroupItem style={{textAlign:'center'}}><FontAwesomeIcon icon={faUser} />&ensp;{this.state.user.namaLengkap}</ListGroupItem>
-                                <ListGroupItem style={{textAlign:'center'}}>Joined <TimeAgo date={this.state.user.created_at} /></ListGroupItem>
+                                <ListGroupItem style={{ textAlign: 'center' }}><FontAwesomeIcon icon={faUser} />&ensp;{this.state.user.namaLengkap}</ListGroupItem>
+                                <ListGroupItem style={{ textAlign: 'center' }}>Joined <TimeAgo date={this.state.user.created_at} /></ListGroupItem>
                             </ListGroup>
                         </Col>
                         <Col sm='8'>
@@ -138,7 +175,7 @@ class UserShow extends React.Component {
                                             className={classnames({ active: this.state.activeTab === '2' })}
                                             onClick={() => { this.toggle('2'); }}
                                         >
-                                            Joint Investment
+                                            Portfolio
             </NavLink>
                                     </NavItem>
                                     {profileCheck}
@@ -151,42 +188,43 @@ class UserShow extends React.Component {
                                         </Row>
                                     </TabPane>
                                     <TabPane tabId="2">
-                                        <Row>
-                                        </Row>
+                                        {portfolio}
                                     </TabPane>
                                     <TabPane tabId="3">
                                         <Row>
                                             <Col sm="3" style={{ margin: '1.5em 0 1.5em 1.5em' }}>
 
 
-                                                    <ListGroup >
-                                                        <ListGroupItem style={{ border: 'none' }}>
-                                                            Nama Lengkap
+                                                <ListGroup >
+                                                    <ListGroupItem style={{ border: 'none' }}>
+                                                        Nama Lengkap
                                                         </ListGroupItem>
-                                                        <ListGroupItem style={{ border: 'none' }}>No Identitas</ListGroupItem>
-                                                        <ListGroupItem style={{ border: 'none' }}>Jenis Identitas</ListGroupItem>
-                                                        <ListGroupItem style={{ border: 'none' }}>Alamat</ListGroupItem>
-                                                        <ListGroupItem style={{ border: 'none' }}>Telepon</ListGroupItem>
-                                                        <ListGroupItem style={{ border: 'none' }}>Pendapatan</ListGroupItem>
-                                                        <ListGroupItem style={{ border: 'none' }}>Sumber Pendapatan</ListGroupItem>
-                                                        <ListGroupItem style={{ border: 'none' }}><Link to={'/user/' + this.state.user._id + '/edit-form'}>Edit Profile</Link></ListGroupItem>
-                                                    </ListGroup>
+                                                    <ListGroupItem style={{ border: 'none' }}>No Identitas</ListGroupItem>
+                                                    <ListGroupItem style={{ border: 'none' }}>Jenis Identitas</ListGroupItem>
+                                                    <ListGroupItem style={{ border: 'none' }}>Alamat</ListGroupItem>
+                                                    <ListGroupItem style={{ border: 'none' }}>Telepon</ListGroupItem>
+                                                    <ListGroupItem style={{ border: 'none' }}>Pendapatan</ListGroupItem>
+                                                    <ListGroupItem style={{ border: 'none' }}>Sumber Pendapatan</ListGroupItem>
+                                                    <ListGroupItem style={{ border: 'none' }}><Link to={'/user/' + this.state.user._id + '/edit-form'}>Edit Profile</Link></ListGroupItem>
+                                                </ListGroup>
                                             </Col>
                                             <Col sm='8' style={{ margin: '1.5em 0' }}>
-                                            <ListGroup >
-                                                        <ListGroupItem style={{ border: 'none' }}>: &ensp;{this.state.user.namaLengkap}</ListGroupItem>
-                                                        <ListGroupItem style={{ border: 'none' }}>: &ensp;{this.state.user.noIdentitas}</ListGroupItem>
-                                                        <ListGroupItem style={{ border: 'none' }}>: &ensp;{this.state.user.jenisIdentitas}</ListGroupItem>
-                                                        <ListGroupItem style={{ border: 'none' }}>: &ensp;{this.state.user.alamat}</ListGroupItem>
-                                                        <ListGroupItem style={{ border: 'none' }}>: &ensp;{this.state.user.telepon}</ListGroupItem>
-                                                        <ListGroupItem style={{ border: 'none' }}>: &ensp;{this.state.user.jumlahPenghasilan}</ListGroupItem>
-                                                        <ListGroupItem style={{ border: 'none' }}>: &ensp;{this.state.user.sumberPenghasilan}</ListGroupItem>
-                                                    </ListGroup>
+                                                <ListGroup >
+                                                    <ListGroupItem style={{ border: 'none' }}>: &ensp;{this.state.user.namaLengkap}</ListGroupItem>
+                                                    <ListGroupItem style={{ border: 'none' }}>: &ensp;{this.state.user.noIdentitas}</ListGroupItem>
+                                                    <ListGroupItem style={{ border: 'none' }}>: &ensp;{this.state.user.jenisIdentitas}</ListGroupItem>
+                                                    <ListGroupItem style={{ border: 'none' }}>: &ensp;{this.state.user.alamat}</ListGroupItem>
+                                                    <ListGroupItem style={{ border: 'none' }}>: &ensp;{this.state.user.telepon}</ListGroupItem>
+                                                    <ListGroupItem style={{ border: 'none' }}>: &ensp;{this.state.user.jumlahPenghasilan}</ListGroupItem>
+                                                    <ListGroupItem style={{ border: 'none' }}>: &ensp;{this.state.user.sumberPenghasilan}</ListGroupItem>
+                                                </ListGroup>
                                             </Col>
                                         </Row>
                                     </TabPane>
                                     <TabPane tabId='4'>
-
+                                        <ListGroup>
+                                            {riwayatContent}
+                                        </ListGroup>
                                     </TabPane>
                                 </TabContent>
                             </div>

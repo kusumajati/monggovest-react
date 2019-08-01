@@ -47,6 +47,7 @@ class AppHeader extends React.Component {
         this.props.history.push('/login')
     }
     componentDidMount() {
+
         if (isLoggedIn()) {
             Axios.get(`${this.state.baseUrl}/v1/api/user/${localStorage.getItem('USER_ID')}`)
                 .then(res => {

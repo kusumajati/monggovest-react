@@ -1,6 +1,6 @@
 import React from 'react'
 import AppHeader from '../common/AppHeader'
-import { Container, TabContent, TabPane, Nav, NavItem, NavLink, Card, Button, CardTitle, CardText, Row, Col } from 'reactstrap';
+import { ListGroup,ListGroupItem,Container, TabContent, TabPane, Nav, NavItem, NavLink, Card, Button, CardTitle, CardText, Row, Col } from 'reactstrap';
 import classnames from 'classnames';
 import Axios from 'axios';
 import TimeAgo from 'react-timeago'
@@ -20,18 +20,32 @@ class Admin extends React.Component {
           investment:[],
           author:'',
           user:{},
+          bankTransfers:[],
           // baseUrl: 'http://localhost:5000',
+          
           baseUrl: 'https://nino-monggovest.herokuapp.com'
         };
         this.verifyInvestment = this.verifyInvestment.bind(this)
+        this.verifyTransfer = this.verifyTransfer.bind(this)
       }
+      verifyTransfer(trfId){
+        Axios.get(`${this.state.baseUrl}/v1/api/bank_transfer/${trfId}/pay`, {headers:{'Authorization':localStorage.getItem('JWT_TOKEN')}})
+        .then(paid=>{
+          alert('bank transfer berhasil di verifikasi')
+          window.location.reload()
+
+        }).catch(err=>{
+          console.log(err)
+          alert(err)
+        })
+      }
+      
       verifyInvestment(invId){
         Axios.get(`${this.state.baseUrl}/v1/api/investment/${invId}/verify`, {headers:{'Authorization':localStorage.getItem('JWT_TOKEN')}})
         .then(verified=>{
           alert('investasi berhasil di verifikasi')
-          return(
-            <Redirect to={this.state.baseUrl+'/v1/api/investment/'+invId} />
-          )
+          window.location.reload()
+
         })
       }
       toggle(tab) {
@@ -50,73 +64,100 @@ class Admin extends React.Component {
               redirect:true
             })
           }else{
-          this.setState({
-            user: user.data.data
-          })
-        }
-          
-          console.log(this.state.user.isAdmin, 'isAdmin')
-          Axios.get(`${this.state.baseUrl}/allinvestment`)
-          .then(investment=>{
+            Axios.get(`${this.state.baseUrl}/v1/api/allNotPaid`,
+            {headers:{'Authorization':localStorage.getItem('JWT_TOKEN')}}).then(bankTransfers=>{
+              Axios.get(`${this.state.baseUrl}/allinvestment`)
+              .then(investment=>{
+  
+                    investment.data.data.map(investasi=>{
+    
+                      if(!investasi.isVerified){
+                        unVerified.push(investasi)
+                      }
+                    })
+                    this.setState({
+                      investment: unVerified,
+                      user: user.data.data,
+                      bankTransfers: bankTransfers.data.data
+    
+                    })
+    
+              })
+            })
 
-                investment.data.data.map(investasi=>{
+          }
 
-                  if(!investasi.isVerified){
-                    unVerified.push(investasi)
-                  }
-                })
-                this.setState({
-                  investment: unVerified
-                })
-                console.log(unVerified)
-
-          }).catch(err=>{
-              alert(err)
-              console.log(err)
-          })
-        })
+        }).catch(err=>{
+          alert(err)
+          console.log(err)
+      })
          
 
       }
       render() {
-        console.log(this.state.user.isAdmin, 'isAdmin')
+        console.log(this.state.bankTransfers)
         if(!isLoggedIn()|| this.state.redirect){
           return(
             <Redirect to='/login'/>
           )
         }
-        let investment = this.state.investment.map(investment=>{
+        let investment = this.state.investment.map(data=>{
             return(
             
             <Row style={{marginBottom:'1em', padding:'1em', borderBottom:'solid 0.5px #dee2e6'}}>
                 <Col sm='4'>
-                <img src={investment.gambar[0]} style={{width:'100%'}} alt=""/>
+                <img src={data.gambar[0]} style={{width:'100%'}} alt=""/>
                 </Col>
                 <Col sm='5' >
-                    <h5><strong>{investment.nama}</strong></h5>
-                    <p style={{fontSize:'0.9em', marginBottom:'0.2em'}}><em><NumberFormat value={investment.nilaiInvestasi} displayType={'text'} thousandSeparator={true} prefix={'Rp'} /></em></p>
-                    <p  style={{fontSize:'0.8em', marginBottom:'0'}} ><em>Posted by {investment.author.namaLengkap} <TimeAgo date={investment.created_at} /></em></p>
-                    <p style={{fontSize:'0.8em', marginBottom:'0'}} ><em>Last Updated <TimeAgo date={investment.created_at} /></em></p>
+                    <h5><strong>{data.nama}</strong></h5>
+                    <p style={{fontSize:'0.9em', marginBottom:'0.2em'}}><em><NumberFormat value={data.nilaiInvestasi} displayType={'text'} thousandSeparator={true} prefix={'Rp'} /></em></p>
+                    <p  style={{fontSize:'0.8em', marginBottom:'0'}} ><em>Posted by {data.author.namaLengkap} <TimeAgo date={data.created_at} /></em></p>
+                    <p style={{fontSize:'0.8em', marginBottom:'0'}} ><em>Last Updated <TimeAgo date={data.created_at} /></em></p>
                     
                 </Col>
                 <Col sm='3' >
-                    <Button onClick={()=>{this.verifyInvestment(investment._id)}} style={{margin:'5px'}}>Verifikasi</Button>
-                    <Link to={'/investasi/'+investment._id}><Button style={{margin:'5px',  fontSize:'0.8em'}}>Lihat Detail</Button></Link>
+                    <Button onClick={()=>{this.verifyInvestment(data._id)}} style={{margin:'5px'}}>Verifikasi</Button>
+                    <Link to={'/investasi/'+data._id}><Button style={{margin:'5px',  fontSize:'0.8em'}}>Lihat Detail</Button></Link>
                 </Col>
                 
+            </Row>            
+            )       
+        })   
+        
+        let bankTransfers = this.state.bankTransfers.map(transfer=>{
+          return(
+            <Row style={{fontSize:'0.9em', borderBottom:'solid 0.5px #dee2e6', padding:'.3em'}}>
+              <Col sm='2'>
+              <p style={{margin: '0'}}><img style={{width:'100%', marginTop:'.5em'}} src={transfer.user.profilePicture} alt=""/><span>{transfer.user.namaLengkap}</span></p>
+
+              </Col>
+              <Col sm='7'>
+           
+                <p style={{margin:'0'}}>Nama Pemilik Akun: {transfer.pemilikAkun} </p>
+                <p style={{margin: '0'}}>Nomor Rekening: {transfer.noRek} - {transfer.namaBank}  </p>
+                <p style={{margin: '0'}}>Investasi: {transfer.investment.nama}</p>
+                <p style={{margin: '0'}}>Lot / Jumlah Transfer: {transfer.slot} Lot / <NumberFormat value={transfer.jumlahTransfer} displayType={'text'} thousandSeparator={true} prefix={'Rp'} /></p>
+                <p style={{margin: '0'}}><em>Created <TimeAgo date={transfer.created_at} /></em></p>
+              </Col>
+              <Col sm='3'>
+              <img style={{width:'100%', display:'flex-box', float:'right'}} src={transfer.investment.gambar[0]} alt=""/>
+              
+              <Button onClick={()=>{this.verifyTransfer(transfer._id)}} style={{marginTop:'0.3em', width:'100%', fontSize:'.9em'}}>Verifikasi</Button> 
+              </Col>
+              
             </Row>
-            
+
             )
-        })          
+        })
 
         return (
-          <div>
+          <div style={{height:'100%'}}>
               <AppHeader/>
-              <Container style={{margin:"70px auto", width:'600px'}}>
+              <Container style={{margin:"70px auto", width:'600px', height:'100%'}}>
 
             <Nav tabs >
               <NavItem style={{width:'50%'}} >
-                <NavLink
+                <NavLink 
                   className={classnames({ active: this.state.activeTab === '1' })}
                   onClick={() => { this.toggle('1'); }}
                 >
@@ -128,7 +169,7 @@ class Admin extends React.Component {
                   className={classnames({ active: this.state.activeTab === '2' })}
                   onClick={() => { this.toggle('2'); }}
                 >
-                  Bank Transfer
+                  Bank Transfers
                 </NavLink>
               </NavItem>
             </Nav>
@@ -140,10 +181,11 @@ class Admin extends React.Component {
                     </div>
 
               </TabPane>
-              <TabPane tabId="2">
+              <TabPane tabId="2" style={{paddingTop:'0.7em'}}>
                 <Row>
                   <Col sm="12">
-                      <div></div>
+                        {bankTransfers}
+
                   </Col>
                 </Row>
               </TabPane>

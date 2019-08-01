@@ -159,8 +159,7 @@ class InvestasiForm extends React.Component {
     }
     handleUploadImageTwo = images => {
         // uploads is an array that would hold all the post methods for each image to be uploaded, then we'd use axios.all()
-        images.map(image => {
-            // our formdata
+        let image = images[0]            // our formdata
             const formData = new FormData();
             formData.append("file", image);
             formData.append("tags", 'TAGS'); // Add tags for the images - {Array}
@@ -180,12 +179,10 @@ class InvestasiForm extends React.Component {
                     this.onAddGambarArr()
                     console.log('ini gambar 2', this.state.gambar2)
                 })
-        });
     }
     handleUploadImageThree = images => {
         // uploads is an array that would hold all the post methods for each image to be uploaded, then we'd use axios.all()
-        images.map(image => {
-            // our formdata
+        let image = images[0]            // our formdata
             const formData = new FormData();
             formData.append("file", image);
             formData.append("tags", 'TAGS'); // Add tags for the images - {Array}
@@ -205,12 +202,10 @@ class InvestasiForm extends React.Component {
                     this.onAddGambarArr()
                     console.log('ini gambar 3', this.state.gambar3)
                 })
-        });
     }
     handleUploadImageFour = images => {
         // uploads is an array that would hold all the post methods for each image to be uploaded, then we'd use axios.all()
-        images.map(image => {
-            // our formdata
+        let image = images[0]            // our formdata
             const formData = new FormData();
             formData.append("file", image);
             formData.append("tags", 'TAGS'); // Add tags for the images - {Array}
@@ -230,12 +225,10 @@ class InvestasiForm extends React.Component {
                     this.onAddGambarArr()
                     console.log('ini gambar 4', this.state.gambar4)
                 })
-        });
     }
     handleUploadImageFive = images => {
         // uploads is an array that would hold all the post methods for each image to be uploaded, then we'd use axios.all()
-        images.map(image => {
-            // our formdata
+        let image = images[0]            // our formdata
             const formData = new FormData();
             formData.append("file", image);
             formData.append("tags", 'TAGS'); // Add tags for the images - {Array}
@@ -250,9 +243,11 @@ class InvestasiForm extends React.Component {
                 { headers: { "X-Requested-With": "XMLHttpRequest" } })
                 .then(response => {                    
                     this.onAddGambarArr()
+                    this.setState({
+                        gambar5: response.data.url
+                    })
                     console.log('ini gambar 5', this.state.gambar5)
                 })
-        });
     }
 
 
@@ -462,13 +457,13 @@ class InvestasiForm extends React.Component {
                             </Col>
                             <Col sm='6'>
                                 <FormGroup>
-                                    <Label for="nilaiInvestasi">Nilai Investasi</Label>
+                                    <Label for="nilaiInvestasi">Nilai Investasi (IDR)</Label>
                                     <Input
-                                        value='1000000'
                                         onChange={this.changeOnNilai}
                                         type="number"
                                         name="nilaiInvestasi"
                                         min='1000000'
+                                        step='500'
                                     />
                                 </FormGroup>
                             </Col>

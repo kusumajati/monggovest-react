@@ -17,7 +17,7 @@ class CarouselHomepage extends Component {
       items: [
         {
           src: 'http://monggovest.herokuapp.com/static/img/hero-bg.57f9674.jpg',
-          altText: 'Cukup dengan akses internet dan uang yang banyak...',
+          altText: '',
           caption: 'Semua Orang Bisa Beternak'
         },
         {

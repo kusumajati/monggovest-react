@@ -15,6 +15,7 @@ export default class MainHomepage extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
+            investment:[],
             investasiTerbaru: [],
             // baseUrl: 'http://localhost:5000',
             baseUrl: 'https://nino-monggovest.herokuapp.com'
@@ -24,17 +25,33 @@ export default class MainHomepage extends React.Component {
 
 
     componentDidMount() {
-        Axios.get(`${this.state.baseUrl}/v1/api/investment_terbaru`)
-            .then(investasi => {
+        // Axios.get(`${this.state.baseUrl}/v1/api/investment_terbaru`)
+        //     .then(investasi => {
 
-                this.setState({
-                    investasiTerbaru:investasi.data.data
-                })
+        //         this.setState({
+        //             investasiTerbaru:investasi.data.data
+        //         })
                 
-                console.log(this.state.investasiTerbaru)
-            }).catch(err => {
-                console.log(err)
+        //         console.log(this.state.investasiTerbaru)
+        //     }).catch(err => {
+        //         console.log(err)
+        //     })
+        let newInvestments
+        Axios.get(`${this.state.baseUrl}/v1/api/allinvestments`)
+        .then(investment=>{
+
+            if(investment.data.data.length-6 < 0){
+                newInvestments =  investment.data.data.slice(0, investment.data.datalength)
+
+            }else{
+                newInvestments = investment.data.data.slice(investment.data.data.length-6, investment.data.data.length)
+            }
+            this.setState({
+                investasiTerbaru: newInvestments,
             })
+        }).catch(err=>{
+            console.log(err,'from axios get allinvestment')
+        })
     }
     render() {
         const cards = this.state.investasiTerbaru.map(investasi => {

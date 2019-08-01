@@ -15,13 +15,13 @@ class MainInvestasi extends React.Component {
         this.state = {
             semuaInvestasi: [],
             semuaVerified: [],
-            // baseUrl: 'http://localhost:5000',
-            baseUrl: 'https://nino-monggovest.herokuapp.com'
+            baseUrl: 'http://localhost:5000',
+            // baseUrl: 'https://nino-monggovest.herokuapp.com'
         }
     }
     componentDidMount() {
         let semuaVerified = []
-        Axios.get(this.state.baseUrl + '/allinvestment')
+        Axios.get(this.state.baseUrl + '/v1/api/allinvestments')
             .then(dataSemuaInvestasi => {
                 // console.log(dataSemuaInvestasi.data.data)
                 dataSemuaInvestasi.data.data.map(investasi => {
