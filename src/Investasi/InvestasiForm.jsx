@@ -18,6 +18,7 @@ class InvestasiForm extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
+            userId:'',
             invId: '',
             nama: '',
             nilaiInvestasi: 1000000,
@@ -42,8 +43,8 @@ class InvestasiForm extends React.Component {
             gambar4: '',
             gambar5: '',
 
-            baseUrl: 'http://localhost:5000',
-            // baseUrl: 'https://nino-monggovest.herokuapp.com',
+            // baseUrl: 'http://localhost:5000',
+            baseUrl: 'https://nino-monggovest.herokuapp.com',
 
             datasWithImg: [],
             success: false
@@ -64,14 +65,8 @@ class InvestasiForm extends React.Component {
         this.changeOnPeriodeBagiHasil = this.changeOnPeriodeBagiHasil.bind(this)
         this.onAddGambarArr = this.onAddGambarArr.bind(this)
         this.sendData = this.sendData.bind(this)
-        this.successTrue = this.successTrue.bind(this)
     }
-    successTrue(res){
-        this.setState({
-            invId: res.data.data._id,
-            success:true
-        })
-    }
+
     changeOnAlamat(event){
         this.setState({
             alamat:{
@@ -285,17 +280,28 @@ class InvestasiForm extends React.Component {
             periodeBagiHasil: this.state.periodeBagiHasil,
             periodeKontrak: this.state.periodeKontrak,
             rincian: this.state.rincian,
-            gambar: this.state.gambarArray
+            gambar: this.state.gambarArray,
+            userId: localStorage.getItem('USER_ID')
         }
         if (this.state.gambarArray.length < 1) {
             alert('gambar tidak boleh kosong')
         } else {
             axios.post(`${this.state.baseUrl}/v1/api/investment`, data, { headers: { "Authorization": localStorage.getItem('JWT_TOKEN')} })
             .then(res => {
-                this.setState({
-                    invId: res.data.data._id,
-                    success:true
-                })            
+    
+                axios.put(`${this.state.baseUrl}/v1/api/user`, {invId: res.data.data._id}, {headers:{"Authorization": localStorage.getItem('JWT_TOKEN')}})
+                .then(()=>{
+                    this.setState({
+                    
+                        invId: res.data.data._id,
+                        success:true
+    
+                    }) 
+                }).catch(errUser=>{
+                    console.log(errUser)
+                })
+            }).catch(err=>{
+                console.log(err)
             })
         }
 

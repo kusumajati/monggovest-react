@@ -9,9 +9,9 @@ class CardInvestasi extends React.Component {
     render() {
         return (
             <Link style={{color: 'black', textDecoration:'none'}} to={this.props.link}>
-            <Card style={{ textAlign: "center" }}>
+            <Card style={{ textAlign: "center"}}>
                 <CardTitle>
-                <img style={{ width: '100%' }}
+                <img style={{ width: '100%', height:'8.5em' }}
                     src={this.props.gambar} alt="" />
                 </CardTitle>
                 <CardBody style={{padding:'0.2em'}}>

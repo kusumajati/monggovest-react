@@ -29,8 +29,8 @@ class AppHeader extends React.Component {
         this.state = {
             isOpen: false,
             user: {},
-            baseUrl: 'http://localhost:5000',
-            // baseUrl: 'https://nino-monggovest.herokuapp.com'
+            // baseUrl: 'http://localhost:5000',
+            baseUrl: 'https://nino-monggovest.herokuapp.com'
         };
         this.logOutLogic = this.logOutLogic.bind(this)
     }
@@ -44,6 +44,10 @@ class AppHeader extends React.Component {
         store.remove('admin')
         localStorage.removeItem('JWT_TOKEN')
         localStorage.removeItem('USER_ID')
+        localStorage.removeItem('jumlahTransfer')
+        localStorage.removeItem('investasiId')
+        localStorage.removeItem('tambahSlot')
+        localStorage.removeItem('investasiNama')
         this.props.history.push('/login')
     }
     componentDidMount() {

@@ -21,9 +21,9 @@ class Admin extends React.Component {
           author:'',
           user:{},
           bankTransfers:[],
-          baseUrl: 'http://localhost:5000',
+          // baseUrl: 'http://localhost:5000',
           
-          // baseUrl: 'https://nino-monggovest.herokuapp.com'
+          baseUrl: 'https://nino-monggovest.herokuapp.com'
         };
         this.verifyInvestment = this.verifyInvestment.bind(this)
         this.verifyTransfer = this.verifyTransfer.bind(this)
@@ -66,17 +66,12 @@ class Admin extends React.Component {
           }else{
             Axios.get(`${this.state.baseUrl}/v1/api/allNotPaid`,
             {headers:{'Authorization':localStorage.getItem('JWT_TOKEN')}}).then(bankTransfers=>{
-              Axios.get(`${this.state.baseUrl}/allinvestment`)
+              Axios.get(`${this.state.baseUrl}/v1/api/unverifiedInvestments`)
               .then(investment=>{
-  
-                    investment.data.data.map(investasi=>{
-    
-                      if(!investasi.isVerified){
-                        unVerified.push(investasi)
-                      }
-                    })
+
                     this.setState({
-                      investment: unVerified,
+                      
+                      investment: investment.data.data,
                       user: user.data.data,
                       bankTransfers: bankTransfers.data.data
     
@@ -95,7 +90,6 @@ class Admin extends React.Component {
 
       }
       render() {
-        console.log(this.state.bankTransfers)
         if(!isLoggedIn()|| this.state.redirect){
           return(
             <Redirect to='/login'/>
@@ -153,7 +147,7 @@ class Admin extends React.Component {
         return (
           <div style={{height:'100%'}}>
               <AppHeader/>
-              <Container style={{margin:"70px auto", width:'600px', height:'100%'}}>
+              <Container style={{margin:"70px auto", width:'600px'}}>
 
             <Nav tabs >
               <NavItem style={{width:'50%'}} >
@@ -173,7 +167,7 @@ class Admin extends React.Component {
                 </NavLink>
               </NavItem>
             </Nav>
-            <TabContent activeTab={this.state.activeTab}>
+            <TabContent  activeTab={this.state.activeTab}>
               <TabPane tabId="1">
 
                     <div style={{padding:'20px 10px'}}>

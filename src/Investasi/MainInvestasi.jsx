@@ -15,8 +15,8 @@ class MainInvestasi extends React.Component {
         this.state = {
             semuaInvestasi: [],
             semuaVerified: [],
-            baseUrl: 'http://localhost:5000',
-            // baseUrl: 'https://nino-monggovest.herokuapp.com'
+            // baseUrl: 'http://localhost:5000',
+            baseUrl: 'https://nino-monggovest.herokuapp.com'
         }
     }
     componentDidMount() {
@@ -45,7 +45,7 @@ class MainInvestasi extends React.Component {
                 
                 <Col style={{margin:'1em 0'}} key={investasi._id} sm="2">
                     <CardInvestasi
-                        title={investasi.nama} gambar={investasi.gambar[0]} harga={<NumberFormat value={investasi.nilaiInvestasi} displayType={'text'} thousandSeparator={true} prefix={'Rp'} />} link={`/investasi/${investasi._id}`} returnHigh={investasi.returnHigh} returnLow={investasi.returnLow} periodeBagiHasil={investasi.periodeBagiHasil}
+                        title={investasi.nama} gambar={investasi.gambar[0]} harga={<NumberFormat value={investasi.nilaiInvestasi} displayType={'text'} thousandSeparator={true} prefix={'Rp'} />} link={`/investasi/${investasi._id}`} returnHigh={investasi.returnHigh} returnLow={investasi.returnLow} periodePeriodeKontrak={investasi.periodeKontrak}
                     />
                 </Col>
             )

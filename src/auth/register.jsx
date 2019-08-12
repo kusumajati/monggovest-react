@@ -17,8 +17,8 @@ class Register extends React.Component {
             email: '',
             namaLengkap: '',
             redirectToHome:false,
-            baseUrl: 'http://localhost:5000',
-            // baseUrl: 'https://nino-monggovest.herokuapp.com'
+            // baseUrl: 'http://localhost:5000',
+            baseUrl: 'https://nino-monggovest.herokuapp.com'
 
         }
         this.changePassword = this.changePassword.bind(this)

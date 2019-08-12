@@ -12,6 +12,7 @@ import UserShow from './User/UserShow'
 import EditProfile from './User/editProfile'
 import TransferEditProfile from './User/TransferEditProfile'
 import PaymentForm from './BankTransfer/PaymentForm'
+import ShowBankTransfer from './BankTransfer/ShowBankTransfer';
 
 
 
@@ -30,6 +31,7 @@ class App extends React.Component {
           <Route exact path='/login' component={AuthLogin} />
           <Route exact path='/register' component={Register} />
           <Route exact path='/admin' component={Admin} />
+          <Route exact path='/bankTransfer/:bankTransferId' component={ShowBankTransfer}/>
           <Switch>
             <Route exact path='/user/:userId' component={UserShow} />
             <Route path='/user/:userId/edit-form' component={EditProfile} />

@@ -18,8 +18,8 @@ class UserShow extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            baseUrl: 'http://localhost:5000',
-            // baseUrl: 'https://nino-monggovest.herokuapp.com',
+            // baseUrl: 'http://localhost:5000',
+            baseUrl: 'https://nino-monggovest.herokuapp.com',
             user: {},
             activeTab: '1',
             createdInvestments: [],
@@ -28,6 +28,7 @@ class UserShow extends React.Component {
 
     }
     componentDidMount() {
+
         let investmentSorted = []
         console.log(this.props.match.params.userId)
         Axios.get(`${this.state.baseUrl}/v1/api/user/${this.props.match.params.userId}`)
@@ -62,6 +63,7 @@ class UserShow extends React.Component {
         let riwayatContent
         let statusBayar
         let portfolio
+        console.log(this.state.bankTransfers, 'ini state bankTransfers')
         if (isLoggedIn() && this.state.user._id === localStorage.getItem('USER_ID')) {
             
             profileCheck =
@@ -108,25 +110,34 @@ class UserShow extends React.Component {
             return(
                 <Row style={{marginBottom:'1em', padding:'1em', borderBottom:'solid 0.5px #dee2e6'}}>
                 <Col sm='4'>
+                <Link  to={'/investasi/'+dataPortfolio.investment._id}>
+
                 <img src={dataPortfolio.investment.gambar[0]} style={{width:'100%'}} alt=""/>
+                </Link>
+
                 </Col>
+
                 <Col sm='3' >
+                <Link style={{textDecoration:'none', color:'black'}}  to={'/investasi/'+dataPortfolio.investment._id}>
                         <p style={{margin:'0'}}>Nama Investasi</p>
                         <p style={{margin:'0'}}>Nilai Investasi</p>
                         <p style={{margin:'0'}}>Lot Dimiliki</p>
                         <p style={{margin:'0'}}>Nilai Lot</p>                      
                         <p style={{margin:'0'}}>Return</p>
                         <p style={{margin:'0'}}>Periode Kontrak</p>
+                        </Link>
                 </Col>
                 <Col sm='5' >
+                <Link style={{textDecoration:'none', color:'black'}}  to={'/investasi/'+dataPortfolio.investment._id}>
+
                 <p style={{margin:'0'}}>: {dataPortfolio.investment.nama}</p>
                         <p style={{margin:'0'}}>: <NumberFormat value={dataPortfolio.investment.nilaiInvestasi} displayType={'text'} thousandSeparator={true} prefix={'Rp'} /></p>
                         <p style={{margin:'0'}}>: {dataPortfolio.slot} / {dataPortfolio.investment.jumlahSlot}</p>
                         <p style={{margin:'0'}}>: <NumberFormat value={dataPortfolio.slot * dataPortfolio.investment.hargaLot} displayType={'text'} thousandSeparator={true} prefix={'Rp'} /></p>                      
                         <p style={{margin:'0'}}>: {dataPortfolio.investment.returnLow} - {dataPortfolio.investment.returnHigh} %</p>
                         <p style={{margin:'0'}}>: {dataPortfolio.investment.periodeKontrak} Tahun</p>
+                </Link>
                 </Col>
-                
             </Row>  
             )
         })
@@ -145,7 +156,7 @@ class UserShow extends React.Component {
                 <Container style={{ height: '100%' }}>
                     <br />
                     <Breadcrumb tag="nav" listTag="div">
-                        <BreadcrumbItem tag="a" href="/">Home</BreadcrumbItem>
+                        <BreadcrumbItem tag="a" href="/">Beranda</BreadcrumbItem>
                         <BreadcrumbItem tag="a" href={'/user/' + this.state.user._id}>{this.state.user.namaLengkap}</BreadcrumbItem>
                     </Breadcrumb>
                     <br />
@@ -153,9 +164,9 @@ class UserShow extends React.Component {
                         <Col sm='4'>
                             <ListGroup>
                                 <ListGroupItem>
-                                    <img style={{ margin: '0 10%', width: '80%' }} src={this.state.user.profilePicture} alt="" />
+                                    <Link to={'/user/' + this.state.user._id}><img style={{ margin: '0 10%', width: '80%' }} src={this.state.user.profilePicture} alt="" /></Link>
                                 </ListGroupItem>
-                                <ListGroupItem style={{ textAlign: 'center' }}><FontAwesomeIcon icon={faUser} />&ensp;{this.state.user.namaLengkap}</ListGroupItem>
+                                <ListGroupItem style={{ textAlign: 'center' }}><Link to={'/user/' + this.state.user._id} style={{textDecoration:'none', color:'black'}}><FontAwesomeIcon icon={faUser} />&ensp;{this.state.user.namaLengkap}</Link></ListGroupItem>
                                 <ListGroupItem style={{ textAlign: 'center' }}>Joined <TimeAgo date={this.state.user.created_at} /></ListGroupItem>
                             </ListGroup>
                         </Col>
@@ -167,7 +178,7 @@ class UserShow extends React.Component {
                                             className={classnames({ active: this.state.activeTab === '1' })}
                                             onClick={() => { this.toggle('1'); }}
                                         >
-                                            Created Investment
+                                            Investasi
             </NavLink>
                                     </NavItem>
                                     <NavItem>

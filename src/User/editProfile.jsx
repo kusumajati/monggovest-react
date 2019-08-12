@@ -25,9 +25,10 @@ class EditProfile extends React.Component {
             telepon: '',
             jumlahPenghasilan: '',
             sumberPenghasilan: '',
+            userId:'',
 
-            baseUrl: 'http://localhost:5000',
-            // baseUrl: 'https://nino-monggovest.herokuapp.com',
+            // baseUrl: 'http://localhost:5000',
+            baseUrl: 'https://nino-monggovest.herokuapp.com',
             redirect: false
 
         }
@@ -67,7 +68,6 @@ class EditProfile extends React.Component {
 
     }
     updateProfile(){
-        console.log(this.state.gambar, 'ini state gambar')
         Axios.put(`${this.state.baseUrl}/v1/api/user`, {
             tanggalLahir: this.state.tanggalLahir,
             namaLengkap: this.state.namaLengkap,
@@ -77,19 +77,15 @@ class EditProfile extends React.Component {
             profilePicture: this.state.gambar,
             telepon: this.state.telepon,
             jumlahPenghasilan: this.state.jumlahPenghasilan,
-            sumberPenghasilan: this.state.sumberPenghasilan,
+            sumberPenghasilan: this.state.sumberPenghasilan
             
-
-
         }, {headers:{'Authorization':localStorage.getItem('JWT_TOKEN')}})
         .then(user=>{
             this.setState({
-                redirect:true
+                redirect:true,
+                userId: user.data.data._id
             })
             console.log('successfully update user')
-        }).catch(err=>{
-            console.log(err)
-            alert(err)
         })
     }
     handleChangeSumberPenghasilan(event){
@@ -151,21 +147,22 @@ class EditProfile extends React.Component {
                 gambar:user.data.data.profilePicture
 
             })
-            console.log(user.data.data.namaLengkap)
+            console.log(user.data.data.namaLengkap, 'ini res user namaLengkap')
         }).catch(err=>{
             console.log(err)
             alert(err)
         })
     }
     render() {
-console.log(this.state.gambar, 'ini state gambar')
+console.log(this.state.userId, 'ini state userId')
+console.log(this.state.redirect, 'ini redirect')
         if (!isLoggedIn()) {
             return (
                 <Redirect to='/login' />
             )
         }else if(this.state.redirect){
             return(
-                <Redirect to={'/user/'+this.state.id} />
+                <Redirect to={'/user/'+this.state.userId} />
  
             )
         }
@@ -331,7 +328,7 @@ console.log(this.state.gambar, 'ini state gambar')
                                         </FormGroup>
                                     </Col>
                                 </Row>
-                                <Button>Submit</Button>
+                                <Button onClick={this.updateProfile}>Submit</Button>
                             </Form>
                         </div>
                     </Container>

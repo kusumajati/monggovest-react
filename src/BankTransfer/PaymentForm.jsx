@@ -19,8 +19,8 @@ class PaymentForm extends React.Component {
             namaBank:'',
             investasi: {},
             redirect: false,
-            baseUrl: 'http://localhost:5000',
-            // baseUrl: 'https://nino-monggovest.herokuapp.com'
+            // baseUrl: 'http://localhost:5000',
+            baseUrl: 'https://nino-monggovest.herokuapp.com'
         }
         this.bayar = this.bayar.bind(this)
         this.onChangeNoRek = this.onChangeNoRek.bind(this)
@@ -47,11 +47,23 @@ class PaymentForm extends React.Component {
             pemilikAkun: this.state.pemilikAkun,
             noRek: this.state.noRek,
             tambahSlot: localStorage.getItem('tambahSlot'),
+            userId: localStorage.getItem('USER_ID'),
+            investmentId: this.state.investasi._id,
+            hargaLot: this.state.investasi.hargaLot,
             namaBank: this.state.namaBank
         }, { headers: { 'Authorization': localStorage.getItem('JWT_TOKEN') } }).then(posted => {
-            this.setState({
-                redirect: true
+            Axios.put(`${this.state.baseUrl}/v1/api/user`, {
+                bankTransferId: posted.data.data._id
+            }, {headers:{'Authorization':localStorage.getItem('JWT_TOKEN')}})
+            .then(()=>{
+                this.setState({
+                    redirect: true
+                })
+            }).catch(errUpdate=>{
+                console.log(errUpdate)
             })
+        }).catch(errPost=>{
+            console.log(errPost)
         })
     }
     componentDidMount() {
@@ -68,7 +80,7 @@ class PaymentForm extends React.Component {
         if (this.state.redirect) {
             alert('silahkan selesaikan pembayaran!')
             return (
-                <Redirect to='/pembayaran-info/:idTransfer' />
+                <Redirect to='/' />
             )
         } else {
             return (

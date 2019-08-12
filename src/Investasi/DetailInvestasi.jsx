@@ -4,7 +4,7 @@ import {
     CarouselItem,
     CarouselControl,
     CarouselIndicators,
-    Modal, ModalHeader, ModalBody, ModalFooter, Input, ListGroup, ListGroupItem,
+    Modal, Progress, ModalHeader, ModalBody, ModalFooter, Input, ListGroup, ListGroupItem,
     CarouselCaption, Alert, Breadcrumb, BreadcrumbItem, CardHeader, CardFooter, CardBody, Container, TabContent, TabPane, Nav, NavItem, NavLink, Card, Button, CardTitle, CardText, Row, Col
 } from 'reactstrap';
 import classnames from 'classnames';
@@ -19,7 +19,7 @@ import 'react-input-range/lib/css/index.css'
 import NumberFormat from 'react-number-format'
 
 
-class MainDetilInvestasi extends Component {
+class DetailInvestasi extends Component {
 
     constructor(props) {
         super(props);
@@ -33,8 +33,8 @@ class MainDetilInvestasi extends Component {
             investasi: {},
             author: {},
             gambarInvestasi: [],
-            baseUrl: 'http://localhost:5000',
-            // baseUrl: 'https://nino-monggovest.herokuapp.com',
+            // baseUrl: 'http://localhost:5000',
+            baseUrl: 'https://nino-monggovest.herokuapp.com',
             redirectToHome: false,
             redirectToEditProfile: false,
             activeIndex: 0,
@@ -51,14 +51,14 @@ class MainDetilInvestasi extends Component {
         this.investNext = this.investNext.bind(this)
         this.delete = this.delete.bind(this)
     }
-    delete(){
+    delete() {
         Axios.delete(`${this.state.baseUrl}/v1/api/investment/${this.props.match.params.idInvestasi}`,
-        {headers:{'Authorization':localStorage.getItem('JWT_TOKEN')}}).then(()=>{
-            alert('You have deleted an investment!')
-            this.setState({
-                redirectToHome: true
+            { headers: { 'Authorization': localStorage.getItem('JWT_TOKEN') } }).then(() => {
+                alert('You have deleted an investment!')
+                this.setState({
+                    redirectToHome: true
+                })
             })
-        })
     }
     toggleModal() {
         this.setState(prevState => ({
@@ -128,12 +128,12 @@ class MainDetilInvestasi extends Component {
                             Axios.get(`${this.state.baseUrl}/v1/api/user/${localStorage.getItem('USER_ID')}`)
                                 .then(user => {
                                     if (!investasi.data.data.isVerified) {
-                                        if (!user.data.data.isAdmin && investasi.data.data.author._id !== localStorage.getItem('USER_ID')) {
+                                        if (!user.data.data.isAdmin && investasi.data.data.author !== localStorage.getItem('USER_ID')) {
                                             this.setState({
                                                 redirectToHome: true
                                             })
-                                        } 
-                                    }else {
+                                        }
+                                    } else {
                                         this.setState({
                                             user: user.data.data
                                         })
@@ -142,7 +142,7 @@ class MainDetilInvestasi extends Component {
                                     console.log(errUser)
                                     alert(errUser)
                                 })
-                        } else if (!investasi.data.data.isVerified && investasi.data.data.author._id !== localStorage.getItem('USER_ID') || !investasi.data.data.isVerified && !isLoggedIn()) {
+                        } else if (!investasi.data.data.isVerified && investasi.data.data.author !== localStorage.getItem('USER_ID') || !investasi.data.data.isVerified && !isLoggedIn()) {
                             this.setState({
 
                                 redirectToHome: true
@@ -156,7 +156,6 @@ class MainDetilInvestasi extends Component {
                             investors: investors.data.data
 
                         })
-                        console.log(this.state.investors, 'ini state')
                     })
 
 
@@ -176,6 +175,7 @@ class MainDetilInvestasi extends Component {
 
 
     render() {
+        console.log(this.state.investasi, 'ini state ')
         if (this.state.redirectToHome) {
             return (
                 <Redirect to='/' />
@@ -241,13 +241,13 @@ class MainDetilInvestasi extends Component {
                             <img src={investor.user.profilePicture} style={{ width: '100%' }} alt="" />
                         </Col>
                         <Col sm='3' >
-                            <br/>
+                            <br />
                             <p style={{ margin: '0' }}>Nama</p>
                             <p style={{ margin: '0' }}>Lot</p>
                             <p style={{ margin: '0' }}>Nilai Lot</p>
                         </Col>
                         <Col sm='6' >
-                            <br/>
+                            <br />
                             <p style={{ margin: '0' }}>: {investor.user.namaLengkap}</p>
                             <p style={{ margin: '0' }}>: {investor.slot} / {investasi.jumlahSlot}</p>
                             <p style={{ margin: '0' }}>: <NumberFormat value={investor.slot * investasi.hargaLot} displayType={'text'} thousandSeparator={true} prefix={'Rp'} /></p>
@@ -287,7 +287,7 @@ class MainDetilInvestasi extends Component {
                                         <CardFooter style={{ padding: "0.8em" }}>
 
                                             <p style={{ margin: '0' }} ><Link style={{ textDecoration: 'none', color: 'black' }} to={'/user/' + author._id}><img style={{ width: '30px', margin: '0 5px' }} src={author.profilePicture} alt="" />
-                                                {author.namaLengkap}</Link>
+                                                {author.namaLengkap} </Link>
                                                 <em style={{ fontSize: '0.7em', display: 'inline-flex', float: "right" }} >Posted&ensp;<TimeAgo date={investasi.created_at} /></em>
                                             </p>
                                             <em style={{ margin: '0', float: 'right', display: 'inline-flex', fontSize: '0.7em' }} >Last Updated&ensp; <TimeAgo date={investasi.created_at} /></em>
@@ -318,7 +318,7 @@ class MainDetilInvestasi extends Component {
                                                 className={classnames({ active: this.state.activeTab === '3' })}
                                                 onClick={() => { this.toggle('3'); }}
                                             >
-                                                Investors
+                                                Investor
                                 </NavLink>
                                         </NavItem>
                                     </Nav>
@@ -334,7 +334,8 @@ class MainDetilInvestasi extends Component {
                                                         </ListGroupItem>
                                                         <ListGroupItem style={{ border: 'none' }}>Nilai Investasi</ListGroupItem>
                                                         <ListGroupItem style={{ border: 'none' }}>Harga Lot</ListGroupItem>
-                                                        <ListGroupItem style={{ border: 'none' }}>Slot Tersedia</ListGroupItem>
+                                                        <ListGroupItem style={{ border: 'none' }}>Slot Terisi</ListGroupItem>
+                                                        <ListGroupItem style={{border:'none'}}>&ensp;</ListGroupItem>
                                                         <ListGroupItem style={{ border: 'none' }}>Return</ListGroupItem>
                                                         <ListGroupItem style={{ border: 'none' }}>Periode Kontrak</ListGroupItem>
                                                         <ListGroupItem style={{ border: 'none' }}>Periode Bagi Hasil</ListGroupItem>
@@ -348,7 +349,8 @@ class MainDetilInvestasi extends Component {
                                                         <ListGroupItem style={{ border: 'none' }}>: &ensp;{investasi.nama}</ListGroupItem>
                                                         <ListGroupItem style={{ border: 'none' }}>: &ensp;<NumberFormat value={investasi.nilaiInvestasi} displayType={'text'} thousandSeparator={true} prefix={'Rp'} /></ListGroupItem>
                                                         <ListGroupItem style={{ border: 'none' }}>: &ensp;<NumberFormat value={investasi.hargaLot} displayType={'text'} thousandSeparator={true} prefix={'Rp'} /></ListGroupItem>
-                                                        <ListGroupItem style={{ border: 'none' }}>: &ensp;{investasi.slot} / {investasi.jumlahSlot}</ListGroupItem>
+                                                        <ListGroupItem style={{ border: 'none' }}>: &ensp;{investasi.jumlahSlot-investasi.slot +' / '+ investasi.jumlahSlot} <span style={{float:'right'}}>{Math.round((((investasi.jumlahSlot - investasi.slot)/investasi.jumlahSlot))*100)}%</span> </ListGroupItem>
+                                                         <ListGroupItem style={{border:'none'}}> <Progress value={Math.round((((investasi.jumlahSlot - investasi.slot)/investasi.jumlahSlot))*100)}></Progress> </ListGroupItem>   
                                                         <ListGroupItem style={{ border: 'none' }}>: &ensp;{investasi.returnLow} - {investasi.returnHigh} %</ListGroupItem>
                                                         <ListGroupItem style={{ border: 'none' }}>: &ensp;{investasi.periodeKontrak} Tahun</ListGroupItem>
                                                         <ListGroupItem style={{ border: 'none' }}>: &ensp;{investasi.periodeBagiHasil} per Tahun</ListGroupItem>
@@ -435,4 +437,4 @@ class MainDetilInvestasi extends Component {
     }
 }
 
-export default MainDetilInvestasi
+export default DetailInvestasi

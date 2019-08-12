@@ -1,3 +1,4 @@
+
 import React from 'react';
 import {
     Container,
@@ -8,17 +9,20 @@ import CardInvestasi from '../common/CardInvestasi';
 import Axios from 'axios'
 import NumberFormat from 'react-number-format'
 import {Link} from 'react-router-dom'
+
+
 // import Style from '../assets/style'
 
 
 export default class MainHomepage extends React.Component {
+    
     constructor(props) {
         super(props)
         this.state = {
             investment:[],
             investasiTerbaru: [],
-            baseUrl: 'http://localhost:5000',
-            // baseUrl: 'https://nino-monggovest.herokuapp.com'
+            // baseUrl: 'http://localhost:5000',
+            baseUrl: 'https://nino-monggovest.herokuapp.com'
         }
 
     }
@@ -37,14 +41,19 @@ export default class MainHomepage extends React.Component {
         //         console.log(err)
         //     })
         let newInvestments
+        let investmentsArr = []
         Axios.get(`${this.state.baseUrl}/v1/api/allinvestments`)
         .then(investment=>{
-
-            if(investment.data.data.length-6 < 0){
-                newInvestments =  investment.data.data.slice(0, investment.data.datalength)
+            investment.data.data.map(investasi=>{
+                if(investasi.isVerified){
+                    investmentsArr.push(investasi)
+                }
+            })
+            if(investmentsArr-6 < 0){
+                newInvestments =  investmentsArr.slice(0, investmentsArr)
 
             }else{
-                newInvestments = investment.data.data.slice(investment.data.data.length-6, investment.data.data.length)
+                newInvestments = investmentsArr.slice(investmentsArr.length-6, investmentsArr.length)
             }
             this.setState({
                 investasiTerbaru: newInvestments,
@@ -95,7 +104,7 @@ export default class MainHomepage extends React.Component {
                             <Link to='/investasi' role='button' className='btn btn-dark btn-lg'>Lihat Investasi</Link>
                         </div>
                     </div>
-                    <Row>
+                    <Row >
                         {cards}
                     </Row>
 

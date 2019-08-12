@@ -16,8 +16,8 @@ class PaymentForm extends React.Component{
         this.state={
             investasi:{},
             redirect:false,
-            baseUrl: 'http://localhost:5000',
-            // baseUrl: 'https://nino-monggovest.herokuapp.com'
+            // baseUrl: 'http://localhost:5000',
+            baseUrl: 'https://nino-monggovest.herokuapp.com'
         }
     }
 

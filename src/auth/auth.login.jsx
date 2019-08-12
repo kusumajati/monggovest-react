@@ -7,8 +7,8 @@ import { Redirect } from 'react-router-dom'
 import axios from "axios";
 import AppFooter from '../common/AppFooter'
 
-// axios.defaults.baseURL = 'https://nino-monggovest.herokuapp.com'
-axios.defaults.baseURL = 'http://localhost:5000'
+axios.defaults.baseURL = 'https://nino-monggovest.herokuapp.com'
+// axios.defaults.baseURL = 'http://localhost:5000'
 class Login extends React.Component {
   constructor(props) {
     super(props)
@@ -44,15 +44,9 @@ class Login extends React.Component {
         password: this.state.password
       })
       .then((response) => {
-
-        console.log(response.data.data.lastLogin, 'login')
-        console.log(response.data.data.created_at, 'created_at')
         localStorage.setItem('JWT_TOKEN', response.data.token)
         localStorage.setItem('USER_ID', response.data.data._id)
         store.set('loggedIn', true);
-        if(response.data.data.isAdmin){
-          store.set('admin', true)
-        }
         this.props.history.push('/');
         alert('Anda berhasil masuk. Selamat Datang di Monggovest');
 
