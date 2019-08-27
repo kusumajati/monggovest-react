@@ -6,6 +6,7 @@ import AppHeader from '../common/AppHeader'
 import AppFooter from '../common/AppFooter'
 import { Label, FormGroup, Input, Container, FormText, Button, Form, Col, Row } from 'reactstrap'
 import NumberFormat from 'react-number-format'
+import {BackEndUrl} from '../config/BackEnd'
 
 
 
@@ -43,7 +44,7 @@ class PaymentForm extends React.Component {
         })
     }
     bayar() {
-        Axios.post(`${this.state.baseUrl}/v1/api/bank_transfer/${localStorage.getItem('investasiId')}`, {
+        Axios.post(`${BackEndUrl}/v1/api/bank_transfer/${localStorage.getItem('investasiId')}`, {
             pemilikAkun: this.state.pemilikAkun,
             noRek: this.state.noRek,
             tambahSlot: localStorage.getItem('tambahSlot'),

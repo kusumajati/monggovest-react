@@ -6,8 +6,10 @@ import AppHeader from '../common/AppHeader'
 import { Redirect } from 'react-router-dom'
 import axios from "axios";
 import AppFooter from '../common/AppFooter'
+import {BackEndUrl} from '../config/BackEnd'
 
-axios.defaults.baseURL = 'https://nino-monggovest.herokuapp.com'
+
+// axios.defaults.baseURL = 'https://nino-monggovest.herokuapp.com'
 // axios.defaults.baseURL = 'http://localhost:5000'
 class Login extends React.Component {
   constructor(props) {
@@ -38,7 +40,7 @@ class Login extends React.Component {
 
   logInLogic(event) {
     event.preventDefault();
-    axios.post("/v1/api/user/login", {
+    axios.post(`${BackEndUrl}/v1/api/user/login`, {
         // .post("/api/login", {
         email: this.state.email,
         password: this.state.password

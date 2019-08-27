@@ -8,6 +8,8 @@ import {Link, Redirect} from 'react-router-dom'
 import isLoggedIn from '../helper/isLoggedIn'
 import NumberFormat from 'react-number-format'
 import AppFooter from '../common/AppFooter';
+import {BackEndUrl} from '../config/BackEnd'
+
 
 class Admin extends React.Component {
     constructor(props) {
@@ -29,7 +31,7 @@ class Admin extends React.Component {
         this.verifyTransfer = this.verifyTransfer.bind(this)
       }
       verifyTransfer(trfId){
-        Axios.get(`${this.state.baseUrl}/v1/api/bank_transfer/${trfId}/pay`, {headers:{'Authorization':localStorage.getItem('JWT_TOKEN')}})
+        Axios.get(`${BackEndUrl}/v1/api/bank_transfer/${trfId}/pay`, {headers:{'Authorization':localStorage.getItem('JWT_TOKEN')}})
         .then(paid=>{
           alert('bank transfer berhasil di verifikasi')
           window.location.reload()

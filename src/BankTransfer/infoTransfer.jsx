@@ -6,6 +6,8 @@ import AppHeader from '../common/AppHeader'
 import AppFooter from '../common/AppFooter'
 import { Container, Button, Col, Row } from 'reactstrap'
 import NumberFormat from 'react-number-format'
+import {BackEndUrl} from '../config/BackEnd'
+
 
 
 

@@ -17,6 +17,8 @@ import AppFooter from '../common/AppFooter'
 import InputRange from 'react-input-range';
 import 'react-input-range/lib/css/index.css'
 import NumberFormat from 'react-number-format'
+import {BackEndUrl} from '../config/BackEnd'
+
 
 
 class DetailInvestasi extends Component {
@@ -52,7 +54,7 @@ class DetailInvestasi extends Component {
         this.delete = this.delete.bind(this)
     }
     delete() {
-        Axios.delete(`${this.state.baseUrl}/v1/api/investment/${this.props.match.params.idInvestasi}`,
+        Axios.delete(`${BackEndUrl}/v1/api/investment/${this.props.match.params.idInvestasi}`,
             { headers: { 'Authorization': localStorage.getItem('JWT_TOKEN') } }).then(() => {
                 alert('You have deleted an investment!')
                 this.setState({
@@ -100,7 +102,7 @@ class DetailInvestasi extends Component {
     }
 
     verifyInv() {
-        Axios.get(`${this.state.baseUrl}/v1/api/investment/${this.state.investasi._id}/verify`, {
+        Axios.get(`${BackEndUrl}/v1/api/investment/${this.state.investasi._id}/verify`, {
             headers: {
                 'Authorization': localStorage.getItem("JWT_TOKEN")
             }
@@ -117,15 +119,15 @@ class DetailInvestasi extends Component {
     componentDidMount() {
         let gambarArr = []
 
-        Axios.get(`${this.state.baseUrl}/v1/api/investment/${this.props.match.params.idInvestasi}`)
+        Axios.get(`${BackEndUrl}/v1/api/investment/${this.props.match.params.idInvestasi}`)
             .then(investasi => {
                 investasi.data.data.gambar.map(gambar => {
                     gambarArr.push(gambar)
                 })
-                Axios.get(`${this.state.baseUrl}/v1/api/portfolioInvestment/${this.props.match.params.idInvestasi}`)
+                Axios.get(`${BackEndUrl}/v1/api/portfolioInvestment/${this.props.match.params.idInvestasi}`)
                     .then(investors => {
                         if (isLoggedIn()) {
-                            Axios.get(`${this.state.baseUrl}/v1/api/user/${localStorage.getItem('USER_ID')}`)
+                            Axios.get(`${BackEndUrl}/v1/api/user/${localStorage.getItem('USER_ID')}`)
                                 .then(user => {
                                     if (!investasi.data.data.isVerified) {
                                         if (!user.data.data.isAdmin && investasi.data.data.author !== localStorage.getItem('USER_ID')) {

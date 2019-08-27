@@ -6,9 +6,9 @@ import { Redirect } from 'react-router-dom'
 import axios from "axios";
 import AppHeader from '../common/AppHeader';
 import AppFooter from '../common/AppFooter'
+import {BackEndUrl} from '../config/BackEnd'
 
 
-// axios.defaults.baseURL = 'http://localhost:5000'
 class Register extends React.Component {
     constructor(props) {
         super(props)
@@ -52,7 +52,7 @@ class Register extends React.Component {
         event.preventDefault();
 
             axios
-                .post(this.state.baseUrl+"/v1/api/user", {
+                .post(BackEndUrl+"/v1/api/user", {
                     email: this.state.email,
                     password: this.state.password,
                     namaLengkap: this.state.namaLengkap

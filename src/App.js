@@ -15,6 +15,7 @@ import PaymentForm from './BankTransfer/PaymentForm'
 
 
 
+
 class App extends React.Component {
   render() {
     return (

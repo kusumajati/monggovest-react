@@ -11,6 +11,8 @@ import NumberFormat from 'react-number-format'
 import TimeAgo from 'react-timeago'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faUser } from '@fortawesome/free-solid-svg-icons'
+import {BackEndUrl} from '../config/BackEnd'
+
 
 
 class UserShow extends React.Component {
@@ -31,9 +33,9 @@ class UserShow extends React.Component {
 
         let investmentSorted = []
         console.log(this.props.match.params.userId)
-        Axios.get(`${this.state.baseUrl}/v1/api/user/${this.props.match.params.userId}`)
+        Axios.get(`${BackEndUrl}/v1/api/user/${this.props.match.params.userId}`)
             .then(user => {
-                Axios.get(`${this.state.baseUrl}/v1/api/portfolioUser/${this.props.match.params.userId}`).then(portfolio=>{
+                Axios.get(`${BackEndUrl}/v1/api/portfolioUser/${this.props.match.params.userId}`).then(portfolio=>{
                     this.setState({
                         user: user.data.data,
                         bankTransfers: user.data.data.bankTransfers,

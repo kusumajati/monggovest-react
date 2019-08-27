@@ -7,6 +7,8 @@ import { Redirect } from 'react-router-dom'
 import axios from "axios";
 import Dropzone from 'react-dropzone'
 import AppFooter from '../common/AppFooter'
+import {BackEndUrl} from '../config/BackEnd'
+
 
 
 
@@ -286,10 +288,10 @@ class InvestasiForm extends React.Component {
         if (this.state.gambarArray.length < 1) {
             alert('gambar tidak boleh kosong')
         } else {
-            axios.post(`${this.state.baseUrl}/v1/api/investment`, data, { headers: { "Authorization": localStorage.getItem('JWT_TOKEN')} })
+            axios.post(`${BackEndUrl}/v1/api/investment`, data, { headers: { "Authorization": localStorage.getItem('JWT_TOKEN')} })
             .then(res => {
     
-                axios.put(`${this.state.baseUrl}/v1/api/user`, {invId: res.data.data._id}, {headers:{"Authorization": localStorage.getItem('JWT_TOKEN')}})
+                axios.put(`${BackEndUrl}/v1/api/user`, {invId: res.data.data._id}, {headers:{"Authorization": localStorage.getItem('JWT_TOKEN')}})
                 .then(()=>{
                     this.setState({
                     

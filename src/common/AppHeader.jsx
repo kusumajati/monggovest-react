@@ -19,6 +19,8 @@ import store from 'store'
 import isAdmin from '../helper/isAdmin'
 import isLoggedIn from '../helper/isLoggedIn'
 import Axios from 'axios';
+import {BackEndUrl} from '../config/BackEnd'
+
 
 
 class AppHeader extends React.Component {
@@ -53,7 +55,7 @@ class AppHeader extends React.Component {
     componentDidMount() {
 
         if (isLoggedIn()) {
-            Axios.get(`${this.state.baseUrl}/v1/api/user/${localStorage.getItem('USER_ID')}`)
+            Axios.get(`${BackEndUrl}/v1/api/user/${localStorage.getItem('USER_ID')}`)
                 .then(res => {
                     this.setState({
                         user: res.data.data

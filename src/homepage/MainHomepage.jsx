@@ -9,6 +9,7 @@ import CardInvestasi from '../common/CardInvestasi';
 import Axios from 'axios'
 import NumberFormat from 'react-number-format'
 import {Link} from 'react-router-dom'
+import {BackEndUrl} from '../config/BackEnd'
 
 
 // import Style from '../assets/style'
@@ -42,7 +43,7 @@ export default class MainHomepage extends React.Component {
         //     })
         let newInvestments
         let investmentsArr = []
-        Axios.get(`${this.state.baseUrl}/v1/api/allinvestments`)
+        Axios.get(`${BackEndUrl}/v1/api/allinvestments`)
         .then(investment=>{
             investment.data.data.map(investasi=>{
                 if(investasi.isVerified){

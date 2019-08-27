@@ -8,6 +8,8 @@ import isLoggedIn from '../helper/isLoggedIn'
 import { Link, Redirect } from 'react-router-dom'
 import Axios from 'axios'
 import Dropzone from 'react-dropzone'
+import {BackEndUrl} from '../config/BackEnd'
+
 
 const dropzoneRef = createRef()
 class EditProfile extends React.Component {
@@ -68,7 +70,7 @@ class EditProfile extends React.Component {
 
     }
     updateProfile(){
-        Axios.put(`${this.state.baseUrl}/v1/api/user`, {
+        Axios.put(`${BackEndUrl}/v1/api/user`, {
             tanggalLahir: this.state.tanggalLahir,
             namaLengkap: this.state.namaLengkap,
             jenisIdentitas: this.state.jenisIdentitas,
@@ -131,7 +133,7 @@ class EditProfile extends React.Component {
     }
 
     componentDidMount(){
-        Axios.get(`${this.state.baseUrl}/v1/api/user/${localStorage.getItem('USER_ID')}`)
+        Axios.get(`${BackEndUrl}/v1/api/user/${localStorage.getItem('USER_ID')}`)
         .then(user=>{
             this.setState({
                 id: user.data.data._id,
