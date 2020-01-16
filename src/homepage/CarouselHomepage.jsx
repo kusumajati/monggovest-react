@@ -98,12 +98,12 @@ class CarouselHomepage extends Component {
     if (this.state.errMessage.data) {
       slides = this.state.errors.map((error) => {
         return (
-          <CarouselItem
+          <CarouselItem 
             onExiting={this.onExiting}
             onExited={this.onExited}
             key={error.src}
           >
-            <img style={{ width: '100%' }} src={error.src} alt={error.altText} />
+            <img src={error.src} alt={error.altText} />
             <CarouselCaption captionText={error.caption} captionHeader={error.caption} />
           </CarouselItem>
         );
@@ -111,12 +111,12 @@ class CarouselHomepage extends Component {
     } else if (this.state.newItems.length > 0) {
       slides = this.state.newItems.map((item) => {
         return (
-          <CarouselItem
+          <CarouselItem 
             onExiting={this.onExiting}
             onExited={this.onExited}
             key={item.src}
           >
-            <img style={{ height: "600px", width: '1500px' }} src={item.src} alt={item.altText} />
+            <img style={{ height: "600px", width: '100%' }} src={item.src} alt={item.altText} />
             <CarouselCaption captionText={item.caption} captionHeader={item.caption} />
           </CarouselItem>
         );
@@ -124,12 +124,12 @@ class CarouselHomepage extends Component {
     } else {
       slides = this.state.items.map((item) => {
         return (
-          <CarouselItem
+          <CarouselItem 
             onExiting={this.onExiting}
             onExited={this.onExited}
             key={item.src}
           >
-            <img style={{ height: "550px", width: '1300px' }} src={item.src} alt={item.altText} />
+            <img style={{ height: "550px", width: '100%' }} src={item.src} alt={item.altText} />
             <CarouselCaption captionText={item.altText} captionHeader={item.caption} />
           </CarouselItem>
         );
@@ -143,7 +143,7 @@ class CarouselHomepage extends Component {
 
     }
     return (
-      <Carousel
+      <Carousel 
         activeIndex={activeIndex}
         next={this.next}
         previous={this.previous}
