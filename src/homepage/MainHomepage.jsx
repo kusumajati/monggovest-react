@@ -30,17 +30,7 @@ export default class MainHomepage extends React.Component {
 
 
     componentDidMount() {
-        // Axios.get(`${this.state.baseUrl}/v1/api/investment_terbaru`)
-        //     .then(investasi => {
-
-        //         this.setState({
-        //             investasiTerbaru:investasi.data.data
-        //         })
-                
-        //         console.log(this.state.investasiTerbaru)
-        //     }).catch(err => {
-        //         console.log(err)
-        //     })
+ 
         let newInvestments
         let investmentsArr = []
         Axios.get(`${BackEndUrl}/v1/api/allinvestments`)
